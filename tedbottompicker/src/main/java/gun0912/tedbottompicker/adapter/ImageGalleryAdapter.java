@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -32,11 +32,11 @@ import gun0912.tedbottompicker.view.TedSquareImageView;
 public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.GalleryViewHolder> {
 
 
-    ArrayList<PickerTile> pickerTiles;
-    Context context;
-    TedBottomPicker.Builder builder;
-    OnItemClickListener onItemClickListener;
-    ArrayList<Uri> selectedUriList;
+    private ArrayList<PickerTile> pickerTiles;
+    private Context context;
+    private TedBottomPicker.Builder builder;
+    private OnItemClickListener onItemClickListener;
+    private ArrayList<Uri> selectedUriList;
 
 
     public ImageGalleryAdapter(Context context, TedBottomPicker.Builder builder) {
@@ -140,14 +140,12 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         } else {
             Uri uri = pickerTile.getImageUri();
             if (builder.imageProvider == null) {
-                Glide.with(context)
+                Picasso.with(context)
                         .load(uri)
-                        .thumbnail(0.1f)
-                        .dontAnimate()
-                        .centerCrop()
+                        .fit()
                         .placeholder(R.drawable.ic_gallery)
-                        .error(R.drawable.img_error)
                         .into(holder.iv_thumbnail);
+
             } else {
                 builder.imageProvider.onProvideImage(holder.iv_thumbnail, uri);
             }
@@ -159,7 +157,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         }
 
 
-        if (holder.root instanceof FrameLayout) {
+        if (holder.root != null) {
 
             Drawable foregroundDrawable;
 
@@ -207,8 +205,8 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         public static final int IMAGE = 1;
         public static final int CAMERA = 2;
         public static final int GALLERY = 3;
-        protected final Uri imageUri;
-        protected final
+        final Uri imageUri;
+        final
         @TileType
         int tileType;
 
@@ -216,7 +214,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             this(null, tileType);
         }
 
-        protected PickerTile(@Nullable Uri imageUri, @TileType int tileType) {
+        PickerTile(@Nullable Uri imageUri, @TileType int tileType) {
             this.imageUri = imageUri;
             this.tileType = tileType;
         }
@@ -248,26 +246,26 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             }
         }
 
-        public boolean isImageTile() {
+        boolean isImageTile() {
             return tileType == IMAGE;
         }
 
-        public boolean isCameraTile() {
+        boolean isCameraTile() {
             return tileType == CAMERA;
         }
 
-        public boolean isGalleryTile() {
+        boolean isGalleryTile() {
             return tileType == GALLERY;
         }
 
         @IntDef({IMAGE, CAMERA, GALLERY})
         @Retention(RetentionPolicy.SOURCE)
-        public @interface TileType {
+        @interface TileType {
         }
 
         @IntDef({CAMERA, GALLERY})
         @Retention(RetentionPolicy.SOURCE)
-        public @interface SpecialTileType {
+        @interface SpecialTileType {
         }
     }
 
@@ -278,7 +276,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
         TedSquareImageView iv_thumbnail;
 
-        public GalleryViewHolder(View view) {
+        GalleryViewHolder(View view) {
             super(view);
             root = (TedSquareFrameLayout) view.findViewById(R.id.root);
             iv_thumbnail = (TedSquareImageView) view.findViewById(R.id.iv_thumbnail);

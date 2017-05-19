@@ -14,10 +14,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -25,8 +24,6 @@ import gun0912.tedbottompicker.TedBottomPicker;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    public RequestManager mGlideRequestManager;
     ImageView iv_image;
     ArrayList<Uri> selectedUriList;
     Uri selectedUri;
@@ -36,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mGlideRequestManager = Glide.with(this);
 
         iv_image = (ImageView) findViewById(R.id.iv_image);
         mSelectedImagesContainer = (ViewGroup) findViewById(R.id.selected_photos_container);
@@ -73,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                         iv_image.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                mGlideRequestManager
+                                                Picasso.with(MainActivity.this)
                                                         .load(uri)
                                                         .into(iv_image);
                                             }
@@ -184,9 +180,9 @@ public class MainActivity extends AppCompatActivity {
             View imageHolder = LayoutInflater.from(this).inflate(R.layout.image_item, null);
             ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
 
-            Glide.with(this)
+            Picasso.with(this)
                     .load(uri.toString())
-                    .fitCenter()
+                    .fit()
                     .into(thumbnail);
 
             mSelectedImagesContainer.addView(imageHolder);

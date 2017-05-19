@@ -41,7 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -340,13 +340,10 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         thumbnail.setLayoutParams(new FrameLayout.LayoutParams(px, px));
 
         if (builder.imageProvider == null) {
-            Glide.with(getActivity())
+            Picasso.with(getActivity())
                     .load(uri)
-                    .thumbnail(0.1f)
-                    .dontAnimate()
-                    .centerCrop()
+                    .fit()
                     .placeholder(R.drawable.ic_gallery)
-                    .error(R.drawable.img_error)
                     .into(thumbnail);
         } else {
             builder.imageProvider.onProvideImage(thumbnail, uri);
