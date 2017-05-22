@@ -353,6 +353,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     private void startCameraIntent() {
         if (builder.photoSourceListener != null) {
             builder.photoSourceListener.openCamera();
+            dismissAllowingStateLoss();
 
         } else {
             Intent cameraInent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -422,6 +423,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     private void startGalleryIntent() {
         if (builder.photoSourceListener != null) {
             builder.photoSourceListener.openGallery();
+            dismissAllowingStateLoss();
 
         } else {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK,
