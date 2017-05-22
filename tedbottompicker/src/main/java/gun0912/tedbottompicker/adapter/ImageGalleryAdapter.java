@@ -135,6 +135,7 @@ public class ImageGalleryAdapter extends
                 Picasso.with(context)
                        .load(uri)
                        .fit()
+                       .centerCrop()
                        .placeholder(R.drawable.ic_gallery)
                        .into(holder.iv_thumbnail);
 

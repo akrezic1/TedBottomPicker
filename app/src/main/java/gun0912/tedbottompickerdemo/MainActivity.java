@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
             Picasso.with(this)
                     .load(uri.toString())
                     .fit()
+                    .centerCrop()
                     .into(thumbnail);
 
             mSelectedImagesContainer.addView(imageHolder);

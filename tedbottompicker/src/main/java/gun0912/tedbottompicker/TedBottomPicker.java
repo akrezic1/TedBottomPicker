@@ -301,6 +301,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             Picasso.with(getActivity())
                    .load(uri)
                    .fit()
+                   .centerCrop()
                    .placeholder(R.drawable.ic_gallery)
                    .into(thumbnail);
         } else {
