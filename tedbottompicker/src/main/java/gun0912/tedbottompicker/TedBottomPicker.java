@@ -351,28 +351,33 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     }
 
     private void startCameraIntent() {
-        Intent cameraInent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraInent.resolveActivity(getActivity().getPackageManager()) == null) {
-            errorMessage("This Application do not have Camera Application");
-            return;
+        if (builder.photoSourceListener != null) {
+            builder.photoSourceListener.openCamera();
+
+        } else {
+            Intent cameraInent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (cameraInent.resolveActivity(getActivity().getPackageManager()) == null) {
+                errorMessage("This Application do not have Camera Application");
+                return;
+            }
+
+            File imageFile = getImageFile();
+            Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
+                                                                                .getPackageName() + ".provider",
+                                                      imageFile);
+
+            List<ResolveInfo> resolvedIntentActivities = getContext().getPackageManager()
+                                                                     .queryIntentActivities(cameraInent,
+                                                                                            PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo resolvedIntentInfo : resolvedIntentActivities) {
+                String packageName = resolvedIntentInfo.activityInfo.packageName;
+                getContext().grantUriPermission(packageName, photoURI,
+                                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+
+            cameraInent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(cameraInent, REQ_CODE_CAMERA);
         }
-
-        File imageFile = getImageFile();
-        Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
-                                                                            .getPackageName() + ".provider",
-                                                  imageFile);
-
-        List<ResolveInfo> resolvedIntentActivities = getContext().getPackageManager()
-                                                                 .queryIntentActivities(cameraInent,
-                                                                                        PackageManager.MATCH_DEFAULT_ONLY);
-        for (ResolveInfo resolvedIntentInfo : resolvedIntentActivities) {
-            String packageName = resolvedIntentInfo.activityInfo.packageName;
-            getContext().grantUriPermission(packageName, photoURI,
-                                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
-
-        cameraInent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-        startActivityForResult(cameraInent, REQ_CODE_CAMERA);
     }
 
     private File getImageFile() {
@@ -415,14 +420,19 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     }
 
     private void startGalleryIntent() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                                          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if (galleryIntent.resolveActivity(getActivity().getPackageManager()) == null) {
-            errorMessage("This Application do not have Gallery Application");
-            return;
-        }
+        if (builder.photoSourceListener != null) {
+            builder.photoSourceListener.openGallery();
 
-        startActivityForResult(galleryIntent, REQ_CODE_GALLERY);
+        } else {
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                              android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            if (galleryIntent.resolveActivity(getActivity().getPackageManager()) == null) {
+                errorMessage("This Application do not have Gallery Application");
+                return;
+            }
+
+            startActivityForResult(galleryIntent, REQ_CODE_GALLERY);
+        }
     }
 
     private void errorMessage() {
@@ -551,6 +561,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         public OnImageSelectedListener onImageSelectedListener;
         public OnMultiImageSelectedListener onMultiImageSelectedListener;
         public OnErrorListener onErrorListener;
+        public PhotoSourceListener photoSourceListener;
         public ImageProvider imageProvider;
         public boolean showCamera = true;
         public boolean showGallery = true;
@@ -565,12 +576,10 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         public int selectMaxCount = Integer.MAX_VALUE;
         public int selectMinCount = 0;
 
-
         public String completeButtonText;
         public String emptySelectionText;
         public String selectMaxCountErrorText;
         public String selectMinCountErrorText;
-
 
         ArrayList<Uri> selectedUriList;
         Uri selectedUri;
@@ -773,6 +782,11 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
 
         public Builder setSelectedUri(Uri selectedUri) {
             this.selectedUri = selectedUri;
+            return this;
+        }
+
+        public Builder setPhotoSourceListener(PhotoSourceListener listener) {
+            this.photoSourceListener = listener;
             return this;
         }
 
