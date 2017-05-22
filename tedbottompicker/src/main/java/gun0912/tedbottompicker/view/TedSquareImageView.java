@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import gun0912.tedbottompicker.R;
 
@@ -13,7 +13,7 @@ import gun0912.tedbottompicker.R;
 /**
  * Created by Gil on 09/06/2014.
  */
-public class TedSquareImageView extends ImageView {
+public class TedSquareImageView extends AppCompatImageView {
 
     String fit_mode;
     private Drawable foreground;
@@ -35,7 +35,6 @@ public class TedSquareImageView extends ImageView {
             setForeground(foreground);
         }
 
-
         try {
             fit_mode = a.getString(R.styleable.TedBottomPickerImageView_fit_mode);
 
@@ -44,12 +43,10 @@ public class TedSquareImageView extends ImageView {
         }
     }
 
-
     //Squares the thumbnail
     @Override
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
 
         if ("height".equals(fit_mode)) {
             setMeasuredDimension(heightMeasureSpec, heightMeasureSpec);
@@ -59,15 +56,12 @@ public class TedSquareImageView extends ImageView {
 
         }
 
-
         if (foreground != null) {
             foreground.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
             invalidate();
         }
 
-
     }
-
 
     /**
      * Supply a Drawable that is to be rendered on top of all of the child views
@@ -95,7 +89,6 @@ public class TedSquareImageView extends ImageView {
         requestLayout();
         invalidate();
     }
-
 
     @Override
     protected boolean verifyDrawable(Drawable who) {

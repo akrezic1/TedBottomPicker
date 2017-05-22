@@ -11,18 +11,16 @@ import android.view.View;
 /**
  *https://gist.github.com/liangzhitao/e57df3c3232ee446d464
  */
-public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
     private int spanCount;
     private int spacing;
     private boolean includeEdge;
 
-
-    public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+    GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
         this.spanCount = spanCount;
         this.spacing = spacing;
         this.includeEdge = includeEdge;
-
     }
 
     @Override

@@ -79,15 +79,12 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     private RecyclerView rc_gallery;
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
 
-
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
             Log.d(TAG, "onStateChanged() newState: " + newState);
             if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                 dismissAllowingStateLoss();
             }
-
-
         }
 
         @Override
@@ -99,24 +96,18 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setupSavedInstanceState(savedInstanceState);
-
-        //  setRetainInstance(true);
     }
 
     private void setupSavedInstanceState(Bundle savedInstanceState) {
-
-
         if (savedInstanceState == null) {
             cameraImageUri = builder.selectedUri;
             tempUriList = builder.selectedUriList;
         } else {
             cameraImageUri = savedInstanceState.getParcelable(EXTRA_CAMERA_IMAGE_URI);
-            tempUriList = savedInstanceState.getParcelableArrayList(EXTRA_CAMERA_SELECTED_IMAGE_URI);
+            tempUriList = savedInstanceState
+                    .getParcelableArrayList(EXTRA_CAMERA_SELECTED_IMAGE_URI);
         }
-
-
     }
 
 
@@ -125,26 +116,12 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         outState.putParcelable(EXTRA_CAMERA_IMAGE_URI, cameraImageUri);
         outState.putParcelableArrayList(EXTRA_CAMERA_SELECTED_IMAGE_URI, selectedUriList);
         super.onSaveInstanceState(outState);
-
     }
 
     public void show(FragmentManager fragmentManager) {
-
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.add(this, getTag());
         ft.commitAllowingStateLoss();
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
-    }
-
-    @Override
-    public void onViewCreated(View contentView, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(contentView, savedInstanceState);
-
-
     }
 
     @Override
@@ -160,17 +137,13 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             if (builder != null && builder.peekHeight > 0) {
                 ((BottomSheetBehavior) behavior).setPeekHeight(builder.peekHeight);
             }
-
         }
 
         initView(contentView);
-
         setTitle();
         setRecyclerView();
         setSelectionView();
-
         selectedUriList = new ArrayList<>();
-
 
         if (builder.onImageSelectedListener != null && cameraImageUri != null) {
             addUri(cameraImageUri);
@@ -185,16 +158,12 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     }
 
     private void setSelectionView() {
-
         if (builder.emptySelectionText != null) {
             selected_photos_empty.setText(builder.emptySelectionText);
         }
-
-
     }
 
     private void setDoneButton() {
-
         if (builder.completeButtonText != null) {
             btn_done.setText(builder.completeButtonText);
         }
@@ -202,10 +171,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 onMultiSelectComplete();
-
-
             }
         });
     }
@@ -217,13 +183,12 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             if (builder.selectMinCountErrorText != null) {
                 message = builder.selectMinCountErrorText;
             } else {
-                message = String.format(getResources().getString(R.string.select_min_count), builder.selectMinCount);
+                message = String.format(getResources().getString(R.string.select_min_count),
+                                        builder.selectMinCount);
             }
-
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         builder.onMultiImageSelectedListener.onImagesSelected(selectedUriList);
         dismissAllowingStateLoss();
@@ -234,32 +199,32 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             btn_done.setVisibility(View.GONE);
             selected_photos_container_frame.setVisibility(View.GONE);
         }
-
     }
 
     private void initView(View contentView) {
-
         view_title_container = contentView.findViewById(R.id.view_title_container);
         rc_gallery = (RecyclerView) contentView.findViewById(R.id.rc_gallery);
         tv_title = (TextView) contentView.findViewById(R.id.tv_title);
         btn_done = (Button) contentView.findViewById(R.id.btn_done);
-
-        selected_photos_container_frame = (FrameLayout) contentView.findViewById(R.id.selected_photos_container_frame);
-        hsv_selected_photos = (HorizontalScrollView) contentView.findViewById(R.id.hsv_selected_photos);
-        selected_photos_container = (LinearLayout) contentView.findViewById(R.id.selected_photos_container);
+        selected_photos_container_frame = (FrameLayout) contentView
+                .findViewById(R.id.selected_photos_container_frame);
+        hsv_selected_photos = (HorizontalScrollView) contentView
+                .findViewById(R.id.hsv_selected_photos);
+        selected_photos_container = (LinearLayout) contentView
+                .findViewById(R.id.selected_photos_container);
         selected_photos_empty = (TextView) contentView.findViewById(R.id.selected_photos_empty);
     }
 
     private void setRecyclerView() {
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         rc_gallery.setLayoutManager(gridLayoutManager);
-        rc_gallery.addItemDecoration(new GridSpacingItemDecoration(gridLayoutManager.getSpanCount(), builder.spacing, false));
+        rc_gallery.addItemDecoration(
+                new GridSpacingItemDecoration(gridLayoutManager.getSpanCount(), builder.spacing,
+                                              false));
         updateAdapter();
     }
 
     private void updateAdapter() {
-
         imageGalleryAdapter = new ImageGalleryAdapter(
                 getActivity()
                 , builder);
@@ -285,7 +250,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
                     default:
                         errorMessage();
                 }
-
             }
         });
     }
@@ -295,60 +259,53 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         //uri = Uri.parse(uri.toString());
         if (isMultiSelect()) {
 
-
             if (selectedUriList.contains(uri)) {
                 removeImage(uri);
             } else {
                 addUri(uri);
             }
 
-
         } else {
             builder.onImageSelectedListener.onImageSelected(uri);
             dismissAllowingStateLoss();
         }
-
     }
 
     private boolean addUri(final Uri uri) {
-
-
         if (selectedUriList.size() == builder.selectMaxCount) {
             String message;
             if (builder.selectMaxCountErrorText != null) {
                 message = builder.selectMaxCountErrorText;
             } else {
-                message = String.format(getResources().getString(R.string.select_max_count), builder.selectMaxCount);
+                message = String.format(getResources().getString(R.string.select_max_count),
+                                        builder.selectMaxCount);
             }
-
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-
         selectedUriList.add(uri);
 
-        final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.tedbottompicker_selected_item, null);
+        final View rootView = LayoutInflater.from(getActivity())
+                                            .inflate(R.layout.tedbottompicker_selected_item, null);
         ImageView thumbnail = (ImageView) rootView.findViewById(R.id.selected_photo);
         ImageView iv_close = (ImageView) rootView.findViewById(R.id.iv_close);
         rootView.setTag(uri);
 
         selected_photos_container.addView(rootView, 0);
 
-
         int px = (int) getResources().getDimension(R.dimen.tedbottompicker_selected_image_height);
         thumbnail.setLayoutParams(new FrameLayout.LayoutParams(px, px));
 
         if (builder.imageProvider == null) {
             Picasso.with(getActivity())
-                    .load(uri)
-                    .fit()
-                    .placeholder(R.drawable.ic_gallery)
-                    .into(thumbnail);
+                   .load(uri)
+                   .fit()
+                   .placeholder(R.drawable.ic_gallery)
+                   .into(thumbnail);
         } else {
             builder.imageProvider.onProvideImage(thumbnail, uri);
         }
-
 
         if (builder.deSelectIconDrawable != null) {
             iv_close.setImageDrawable(builder.deSelectIconDrawable);
@@ -362,21 +319,16 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             }
         });
 
-
         updateSelectedView();
         imageGalleryAdapter.setSelectedUriList(selectedUriList, uri);
         return true;
-
     }
 
     private void removeImage(Uri uri) {
-
         selectedUriList.remove(uri);
-
 
         for (int i = 0; i < selected_photos_container.getChildCount(); i++) {
             View childView = selected_photos_container.getChildAt(i);
-
 
             if (childView.getTag().equals(uri)) {
                 selected_photos_container.removeViewAt(i);
@@ -389,7 +341,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     }
 
     private void updateSelectedView() {
-
         if (selectedUriList == null || selectedUriList.size() == 0) {
             selected_photos_empty.setVisibility(View.VISIBLE);
             selected_photos_container.setVisibility(View.GONE);
@@ -397,7 +348,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             selected_photos_empty.setVisibility(View.GONE);
             selected_photos_container.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void startCameraIntent() {
@@ -408,36 +358,42 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         }
 
         File imageFile = getImageFile();
-        Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext().getPackageName() + ".provider", imageFile);
+        Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
+                                                                            .getPackageName() + ".provider",
+                                                  imageFile);
 
-        List<ResolveInfo> resolvedIntentActivities = getContext().getPackageManager().queryIntentActivities(cameraInent, PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> resolvedIntentActivities = getContext().getPackageManager()
+                                                                 .queryIntentActivities(cameraInent,
+                                                                                        PackageManager.MATCH_DEFAULT_ONLY);
         for (ResolveInfo resolvedIntentInfo : resolvedIntentActivities) {
             String packageName = resolvedIntentInfo.activityInfo.packageName;
-            getContext().grantUriPermission(packageName, photoURI, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            getContext().grantUriPermission(packageName, photoURI,
+                                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
 
         cameraInent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
         startActivityForResult(cameraInent, REQ_CODE_CAMERA);
-
     }
 
     private File getImageFile() {
         // Create an image file name
         File imageFile = null;
         try {
-            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault())
+                    .format(new Date());
             String imageFileName = "JPEG_" + timeStamp + "_";
-            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File storageDir = Environment
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-            if (!storageDir.exists())
+            if (!storageDir.exists()) {
                 storageDir.mkdirs();
+            }
 
             imageFile = File.createTempFile(
                     imageFileName,  /* prefix */
                     ".jpg",         /* suffix */
                     storageDir      /* directory */
             );
-
 
             // Save a file: path for use with ACTION_VIEW intents
             cameraImageUri = Uri.fromFile(imageFile);
@@ -446,13 +402,11 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             errorMessage("Could not create imageFile for camera");
         }
 
-
         return imageFile;
     }
 
     private void errorMessage(String message) {
         String errorMessage = message == null ? "Something wrong." : message;
-
         if (builder.onErrorListener == null) {
             Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
         } else {
@@ -461,14 +415,14 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     }
 
     private void startGalleryIntent() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                                          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (galleryIntent.resolveActivity(getActivity().getPackageManager()) == null) {
             errorMessage("This Application do not have Gallery Application");
             return;
         }
 
         startActivityForResult(galleryIntent, REQ_CODE_GALLERY);
-
     }
 
     private void errorMessage() {
@@ -505,8 +459,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-
-
             switch (requestCode) {
                 case REQ_CODE_GALLERY:
                     onActivityResultGallery(data);
@@ -518,32 +470,30 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
                 default:
                     errorMessage();
             }
-
-
         }
-
     }
 
     private void onActivityResultCamera(final Uri cameraImageUri) {
+        MediaScannerConnection.scanFile(getContext(), new String[]{cameraImageUri.getPath()},
+                                        new String[]{"image/jpeg"},
+                                        new MediaScannerConnection.MediaScannerConnectionClient() {
+                                            @Override
+                                            public void onMediaScannerConnected() {
 
-        MediaScannerConnection.scanFile(getContext(), new String[]{cameraImageUri.getPath()}, new String[]{"image/jpeg"}, new MediaScannerConnection.MediaScannerConnectionClient() {
-            @Override
-            public void onMediaScannerConnected() {
+                                            }
 
-            }
+                                            @Override
+                                            public void onScanCompleted(String s, Uri uri) {
+                                                getActivity().runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        updateAdapter();
+                                                        complete(cameraImageUri);
+                                                    }
+                                                });
 
-            @Override
-            public void onScanCompleted(String s, Uri uri) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateAdapter();
-                        complete(cameraImageUri);
-                    }
-                });
-
-            }
-        });
+                                            }
+                                        });
     }
 
 
@@ -564,23 +514,26 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         }
 
         complete(selectedImageUri);
-
     }
 
 
     public interface OnMultiImageSelectedListener {
+
         void onImagesSelected(ArrayList<Uri> uriList);
     }
 
     public interface OnImageSelectedListener {
+
         void onImageSelected(Uri uri);
     }
 
     public interface OnErrorListener {
+
         void onError(String message);
     }
 
     public interface ImageProvider {
+
         void onProvideImage(ImageView imageView, Uri imageUri);
     }
 
@@ -696,7 +649,8 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             return this;
         }
 
-        public Builder setOnMultiImageSelectedListener(OnMultiImageSelectedListener onMultiImageSelectedListener) {
+        public Builder setOnMultiImageSelectedListener(
+                OnMultiImageSelectedListener onMultiImageSelectedListener) {
             this.onMultiImageSelectedListener = onMultiImageSelectedListener;
             return this;
         }
@@ -784,7 +738,8 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         }
 
         public Builder setSelectMaxCountErrorText(@StringRes int selectMaxCountErrorResId) {
-            this.selectMaxCountErrorText = context.getResources().getString(selectMaxCountErrorResId);
+            this.selectMaxCountErrorText = context.getResources()
+                                                  .getString(selectMaxCountErrorResId);
             return this;
         }
 
@@ -794,7 +749,8 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         }
 
         public Builder setSelectMinCountErrorText(@StringRes int selectMinCountErrorResId) {
-            this.selectMinCountErrorText = context.getResources().getString(selectMinCountErrorResId);
+            this.selectMinCountErrorText = context.getResources()
+                                                  .getString(selectMinCountErrorResId);
             return this;
         }
 
@@ -822,12 +778,15 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
 
         public TedBottomPicker create() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-                    && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                throw new RuntimeException("Missing required WRITE_EXTERNAL_STORAGE permission. Did you remember to request it first?");
+                    && ContextCompat.checkSelfPermission(context,
+                                                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                throw new RuntimeException(
+                        "Missing required WRITE_EXTERNAL_STORAGE permission. Did you remember to request it first?");
             }
 
             if (onImageSelectedListener == null && onMultiImageSelectedListener == null) {
-                throw new RuntimeException("You have to use setOnImageSelectedListener() or setOnMultiImageSelectedListener() for receive selected Uri");
+                throw new RuntimeException(
+                        "You have to use setOnImageSelectedListener() or setOnMultiImageSelectedListener() for receive selected Uri");
             }
 
             TedBottomPicker customBottomSheetDialogFragment = new TedBottomPicker();
