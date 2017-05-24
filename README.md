@@ -1,3 +1,4 @@
+ This is fork of original TedBottomPicker, I've just altered some code and merged pull requests that were needed for my project. I use it in my project as a jitpack dependency.
  
 # What is TedBottomPicker?
 In Google's Material Design, Google introduce **Bottom sheets**.([Components – Bottom sheets](https://material.google.com/components/bottom-sheets.html))<br/>
