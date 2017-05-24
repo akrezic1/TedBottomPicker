@@ -38,9 +38,7 @@ public class TedEmptyRecyclerView extends RecyclerView {
 			checkIfEmpty();
 		}
 	};
-	
-	
-	
+
 	@Override
 	public void setAdapter(@Nullable Adapter adapter) {
 		final Adapter oldAdapter = getAdapter();

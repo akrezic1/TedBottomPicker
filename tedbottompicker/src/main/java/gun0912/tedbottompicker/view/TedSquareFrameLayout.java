@@ -12,7 +12,6 @@ import gun0912.tedbottompicker.R;
  */
 public class TedSquareFrameLayout extends FrameLayout {
 
-
     private static boolean mMatchHeightToWidth;
     private static boolean mMatchWidthToHeight;
 
@@ -35,8 +34,6 @@ public class TedSquareFrameLayout extends FrameLayout {
             a.recycle();
         }
     }
-
-
 
     //Squares the thumbnail
     @Override

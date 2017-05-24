@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -29,15 +29,14 @@ import gun0912.tedbottompicker.view.TedSquareImageView;
 /**
  * Created by TedPark on 2016. 8. 30..
  */
-public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapter.GalleryViewHolder> {
+public class ImageGalleryAdapter extends
+        RecyclerView.Adapter<ImageGalleryAdapter.GalleryViewHolder> {
 
-
-    ArrayList<PickerTile> pickerTiles;
-    Context context;
-    TedBottomPicker.Builder builder;
-    OnItemClickListener onItemClickListener;
-    ArrayList<Uri> selectedUriList;
-
+    private ArrayList<PickerTile> pickerTiles;
+    private Context context;
+    private TedBottomPicker.Builder builder;
+    private OnItemClickListener onItemClickListener;
+    private ArrayList<Uri> selectedUriList;
 
     public ImageGalleryAdapter(Context context, TedBottomPicker.Builder builder) {
 
@@ -60,22 +59,22 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             final String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.ImageColumns.ORIENTATION};
             final String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
-
-            imageCursor = context.getApplicationContext().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+            imageCursor = context.getApplicationContext().getContentResolver()
+                                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
+                                        null, orderBy);
             //imageCursor = sContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
-
 
             if (imageCursor != null) {
 
                 int count = 0;
                 while (imageCursor.moveToNext() && count < builder.previewMaxCount) {
-                    String imageLocation = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    String imageLocation = imageCursor
+                            .getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
                     File imageFile = new File(imageLocation);
                     pickerTiles.add(new PickerTile(Uri.fromFile(imageFile)));
                     count++;
 
                 }
-
             }
 
         } catch (Exception e) {
@@ -86,14 +85,12 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             }
         }
 
-
     }
 
     public void setSelectedUriList(ArrayList<Uri> selectedUriList, Uri uri) {
         this.selectedUriList = selectedUriList;
 
         int position = -1;
-
 
         PickerTile pickerTile;
         for (int i = 0; i < pickerTiles.size(); i++) {
@@ -105,21 +102,16 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
 
         }
 
-
         if (position > 0) {
             notifyItemChanged(position);
         }
-
 
     }
 
     @Override
     public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(context, R.layout.tedbottompicker_grid_item, null);
-        final GalleryViewHolder holder = new GalleryViewHolder(view);
-
-
-        return holder;
+        return new GalleryViewHolder(view);
     }
 
     @Override
@@ -140,38 +132,33 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
         } else {
             Uri uri = pickerTile.getImageUri();
             if (builder.imageProvider == null) {
-                Glide.with(context)
-                        .load(uri)
-                        .thumbnail(0.1f)
-                        .dontAnimate()
-                        .centerCrop()
-                        .placeholder(R.drawable.ic_gallery)
-                        .error(R.drawable.img_error)
-                        .into(holder.iv_thumbnail);
+                Picasso.with(context)
+                       .load(uri)
+                       .fit()
+                       .centerCrop()
+                       .placeholder(R.drawable.ic_gallery)
+                       .into(holder.iv_thumbnail);
+
             } else {
                 builder.imageProvider.onProvideImage(holder.iv_thumbnail, uri);
             }
 
-
             isSelected = selectedUriList.contains(uri);
-
-
         }
 
-
-        if (holder.root instanceof FrameLayout) {
+        if (holder.root != null) {
 
             Drawable foregroundDrawable;
 
-            if(builder.selectedForegroundDrawable!=null){
+            if (builder.selectedForegroundDrawable != null) {
                 foregroundDrawable = builder.selectedForegroundDrawable;
-            }else{
-                foregroundDrawable = ContextCompat.getDrawable(context,R.drawable.gallery_photo_selected);
+            } else {
+                foregroundDrawable = ContextCompat
+                        .getDrawable(context, R.drawable.gallery_photo_selected);
             }
 
             ((FrameLayout) holder.root).setForeground(isSelected ? foregroundDrawable : null);
         }
-
 
         if (onItemClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -198,17 +185,17 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
     }
 
     public interface OnItemClickListener {
+
         public void onItemClick(View view, int position);
     }
-
 
     public static class PickerTile {
 
         public static final int IMAGE = 1;
         public static final int CAMERA = 2;
         public static final int GALLERY = 3;
-        protected final Uri imageUri;
-        protected final
+        final Uri imageUri;
+        final
         @TileType
         int tileType;
 
@@ -216,7 +203,7 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             this(null, tileType);
         }
 
-        protected PickerTile(@Nullable Uri imageUri, @TileType int tileType) {
+        PickerTile(@Nullable Uri imageUri, @TileType int tileType) {
             this.imageUri = imageUri;
             this.tileType = tileType;
         }
@@ -248,37 +235,37 @@ public class ImageGalleryAdapter extends RecyclerView.Adapter<ImageGalleryAdapte
             }
         }
 
-        public boolean isImageTile() {
+        boolean isImageTile() {
             return tileType == IMAGE;
         }
 
-        public boolean isCameraTile() {
+        boolean isCameraTile() {
             return tileType == CAMERA;
         }
 
-        public boolean isGalleryTile() {
+        boolean isGalleryTile() {
             return tileType == GALLERY;
         }
 
         @IntDef({IMAGE, CAMERA, GALLERY})
         @Retention(RetentionPolicy.SOURCE)
-        public @interface TileType {
+        @interface TileType {
+
         }
 
         @IntDef({CAMERA, GALLERY})
         @Retention(RetentionPolicy.SOURCE)
-        public @interface SpecialTileType {
+        @interface SpecialTileType {
+
         }
     }
 
     class GalleryViewHolder extends RecyclerView.ViewHolder {
 
         TedSquareFrameLayout root;
-
-
         TedSquareImageView iv_thumbnail;
 
-        public GalleryViewHolder(View view) {
+        GalleryViewHolder(View view) {
             super(view);
             root = (TedSquareFrameLayout) view.findViewById(R.id.root);
             iv_thumbnail = (TedSquareImageView) view.findViewById(R.id.iv_thumbnail);
