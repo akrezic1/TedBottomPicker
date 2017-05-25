@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -163,6 +164,8 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
                 addUri(uri);
             }
         }
+
+        dialog.setOnDismissListener(builder.dismissListener);
 
         setDoneButton();
         checkMultiMode();
@@ -580,26 +583,27 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         public OnImageSelectedListener onImageSelectedListener;
         public OnMultiImageSelectedListener onMultiImageSelectedListener;
         public OnErrorListener onErrorListener;
+        DialogInterface.OnDismissListener dismissListener;
         public PhotoSourceListener photoSourceListener;
         public ImageProvider imageProvider;
         public boolean showCamera = true;
         public boolean showGallery = true;
         public int peekHeight = -1;
         public int cameraTileBackgroundResId = R.color.tedbottompicker_camera;
-        public int galleryTileBackgroundResId = R.color.tedbottompicker_gallery;
 
+        public int galleryTileBackgroundResId = R.color.tedbottompicker_gallery;
         public String title;
         public boolean showTitle = true;
+
         public int titleBackgroundResId;
-
         public int selectMaxCount = Integer.MAX_VALUE;
-        public int selectMinCount = 0;
 
+        public int selectMinCount = 0;
         public String completeButtonText;
         public String emptySelectionText;
         public String selectMaxCountErrorText;
-        public String selectMinCountErrorText;
 
+        public String selectMinCountErrorText;
         ArrayList<Uri> selectedUriList;
         Uri selectedUri;
 
@@ -806,6 +810,11 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
 
         public Builder setPhotoSourceListener(PhotoSourceListener listener) {
             this.photoSourceListener = listener;
+            return this;
+        }
+
+        public Builder setOnDismissListener(DialogInterface.OnDismissListener listener) {
+            this.dismissListener = listener;
             return this;
         }
 
