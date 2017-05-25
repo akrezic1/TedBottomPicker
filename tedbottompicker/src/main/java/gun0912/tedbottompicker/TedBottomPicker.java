@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -138,6 +139,14 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     }
 
     @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        if (builder.finishOnDismiss) {
+            getActivity().finish();
+        }
+    }
+
+    @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         contentView = View.inflate(getContext(), R.layout.tedbottompicker_content_view, null);
@@ -165,6 +174,8 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
                 addUri(uri);
             }
         }
+
+        dialog.setOnDismissListener(builder.dismissListener);
 
         setDoneButton();
         checkMultiMode();
@@ -582,29 +593,30 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         public OnImageSelectedListener onImageSelectedListener;
         public OnMultiImageSelectedListener onMultiImageSelectedListener;
         public OnErrorListener onErrorListener;
+        DialogInterface.OnDismissListener dismissListener;
         public PhotoSourceListener photoSourceListener;
         public ImageProvider imageProvider;
         public boolean showCamera = true;
         public boolean showGallery = true;
-        public int peekHeight = -1;
 
+        public int peekHeight = -1;
         public int cameraTileBackgroundResId = R.color.tedbottompicker_camera;
         public int galleryTileBackgroundResId = R.color.tedbottompicker_gallery;
+
         public String title;
-
         public boolean showTitle = true;
-        public int titleBackgroundResId;
 
+        public int titleBackgroundResId;
         public int selectMaxCount = Integer.MAX_VALUE;
         public int selectMinCount = 0;
         public String completeButtonText;
-        public String emptySelectionText;
 
+        public String emptySelectionText;
         public String selectMaxCountErrorText;
         public String selectMinCountErrorText;
         ArrayList<Uri> selectedUriList;
-        Uri selectedUri;
 
+        Uri selectedUri;
         private boolean finishOnDismiss;
 
         public Builder(@NonNull Context context) {
@@ -813,8 +825,19 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             return this;
         }
 
+        /**
+         * Set to true to finish Activity after dialog is dismissed
+         *
+         * @param finish true to finish activity
+         * @return Builder
+         */
         public Builder setFinishOnDismiss(boolean finish) {
             this.finishOnDismiss = finish;
+            return this;
+        }
+
+        public Builder setOnDismissListener(DialogInterface.OnDismissListener listener) {
+            this.dismissListener = listener;
             return this;
         }
 

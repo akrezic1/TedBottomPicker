@@ -74,12 +74,6 @@ public class MainActivity extends AppCompatActivity {
                                                         .into(iv_image);
                                             }
                                         });
-                                        /*
-                                        Glide.with(MainActivity.this)
-                                                //.load(uri.toString())
-                                                .load(uri)
-                                                .into(iv_image);
-                                         */
                                     }
                                 })
                                 //.setPeekHeight(getResources().getDisplayMetrics().heightPixels/2)
