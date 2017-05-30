@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
                                 })
                                 //.setPeekHeight(getResources().getDisplayMetrics().heightPixels/2)
                                 .setSelectedUri(selectedUri)
+                                .setCameraTileText("Take a photo")
+                                .setGalleryTileText("Choose from gallery")
                                 .setPeekHeight(1200)
                                 .create();
 

@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -125,11 +126,18 @@ public class ImageGalleryAdapter extends
         if (pickerTile.isCameraTile()) {
             holder.iv_thumbnail.setBackgroundResource(builder.cameraTileBackgroundResId);
             holder.iv_thumbnail.setImageDrawable(builder.cameraTileDrawable);
+            holder.tvText.setVisibility(View.VISIBLE);
+            holder.tvText.setText(builder.cameraTileText);
+
         } else if (pickerTile.isGalleryTile()) {
             holder.iv_thumbnail.setBackgroundResource(builder.galleryTileBackgroundResId);
             holder.iv_thumbnail.setImageDrawable(builder.galleryTileDrawable);
+            holder.tvText.setVisibility(View.VISIBLE);
+            holder.tvText.setText(builder.galleryTileText);
 
         } else {
+            holder.tvText.setVisibility(View.GONE);
+
             Uri uri = pickerTile.getImageUri();
             if (builder.imageProvider == null) {
                 Picasso.with(context)
@@ -264,12 +272,13 @@ public class ImageGalleryAdapter extends
 
         TedSquareFrameLayout root;
         TedSquareImageView iv_thumbnail;
+        TextView tvText;
 
         GalleryViewHolder(View view) {
             super(view);
             root = (TedSquareFrameLayout) view.findViewById(R.id.root);
             iv_thumbnail = (TedSquareImageView) view.findViewById(R.id.iv_thumbnail);
-
+            tvText = (TextView) view.findViewById(R.id.text);
         }
 
     }

@@ -601,7 +601,9 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
 
         public int peekHeight = -1;
         public int cameraTileBackgroundResId = R.color.tedbottompicker_camera;
+        public String cameraTileText;
         public int galleryTileBackgroundResId = R.color.tedbottompicker_gallery;
+        public String galleryTileText;
 
         public String title;
         public boolean showTitle = true;
@@ -635,6 +637,26 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
 
         public Builder setCameraTile(Drawable cameraTileDrawable) {
             this.cameraTileDrawable = cameraTileDrawable;
+            return this;
+        }
+
+        public Builder setCameraTileText(@StringRes int stringRes) {
+            this.cameraTileText = context.getString(stringRes);
+            return this;
+        }
+
+        public Builder setCameraTileText(String text) {
+            this.cameraTileText = text;
+            return this;
+        }
+
+        public Builder setGalleryTileText(@StringRes int stringRes) {
+            this.galleryTileText = context.getString(stringRes);
+            return this;
+        }
+
+        public Builder setGalleryTileText(String text) {
+            this.galleryTileText = text;
             return this;
         }
 
