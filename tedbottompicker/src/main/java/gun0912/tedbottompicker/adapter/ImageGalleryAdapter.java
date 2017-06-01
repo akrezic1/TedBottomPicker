@@ -61,7 +61,7 @@ public class ImageGalleryAdapter extends
             final String orderBy = MediaStore.Images.Media.DATE_ADDED + " DESC";
 
             imageCursor = context.getApplicationContext().getContentResolver()
-                                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
+                                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, MediaStore.Images.Media.SIZE + "> 10000",
                                         null, orderBy);
             //imageCursor = sContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
 
