@@ -47,7 +47,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,7 +63,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     static final int REQ_CODE_GALLERY = 2;
     static final String EXTRA_CAMERA_IMAGE_URI = "camera_image_uri";
     static final String EXTRA_CAMERA_SELECTED_IMAGE_URI = "camera_selected_image_uri";
-    private static final String KEY_BUILDER = "builder";
     public Builder builder;
     ImageGalleryAdapter imageGalleryAdapter;
     View view_title_container;
@@ -114,7 +112,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
             cameraImageUri = savedInstanceState.getParcelable(EXTRA_CAMERA_IMAGE_URI);
             tempUriList = savedInstanceState
                     .getParcelableArrayList(EXTRA_CAMERA_SELECTED_IMAGE_URI);
-            builder = (Builder) savedInstanceState.getSerializable(KEY_BUILDER);
         }
     }
 
@@ -122,7 +119,6 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(EXTRA_CAMERA_IMAGE_URI, cameraImageUri);
         outState.putParcelableArrayList(EXTRA_CAMERA_SELECTED_IMAGE_URI, selectedUriList);
-        outState.putSerializable(KEY_BUILDER, builder);
         super.onSaveInstanceState(outState);
     }
 
@@ -583,7 +579,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         void onProvideImage(ImageView imageView, Uri imageUri);
     }
 
-    public static class Builder implements Serializable {
+    public static class Builder {
 
         public Context context;
         public int previewMaxCount = 25;
