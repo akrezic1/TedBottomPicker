@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                                         iv_image.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Picasso.with(MainActivity.this)
+                                                Picasso.get()
                                                         .load(uri)
                                                         .into(iv_image);
                                             }
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
             View imageHolder = LayoutInflater.from(this).inflate(R.layout.image_item, null);
             ImageView thumbnail = (ImageView) imageHolder.findViewById(R.id.media_image);
 
-            Picasso.with(this)
+            Picasso.get()
                     .load(uri.toString())
                     .fit()
                     .centerCrop()

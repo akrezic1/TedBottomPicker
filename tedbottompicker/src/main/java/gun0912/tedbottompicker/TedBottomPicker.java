@@ -322,7 +322,7 @@ public class TedBottomPicker extends BottomSheetDialogFragment {
         thumbnail.setLayoutParams(new FrameLayout.LayoutParams(px, px));
 
         if (builder.imageProvider == null) {
-            Picasso.with(getActivity())
+            Picasso.get()
                    .load(uri)
                    .fit()
                    .centerCrop()

@@ -140,7 +140,7 @@ public class ImageGalleryAdapter extends
 
             Uri uri = pickerTile.getImageUri();
             if (builder.imageProvider == null) {
-                Picasso.with(context)
+                Picasso.get()
                        .load(uri)
                        .fit()
                        .centerCrop()
