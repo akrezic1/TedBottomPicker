@@ -11,7 +11,7 @@ import android.view.View;
 /**
  *https://gist.github.com/liangzhitao/e57df3c3232ee446d464
  */
-class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
     private int spanCount;
     private int spacing;
